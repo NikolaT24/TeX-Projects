@@ -22,7 +22,7 @@ Two core systems are included:
 
 ---
 
-## 🧪 Evolution Matrix
+### 🧪 Evolution Matrix
 
 ```latex
 \EvolutionMatrix{
@@ -30,6 +30,7 @@ Two core systems are included:
   The system adapts to dynamic data,
   Data flows through the system continuously
 }
+```
 
 ### Behavior
 * Generates three variants per generation:

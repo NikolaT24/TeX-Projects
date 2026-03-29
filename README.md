@@ -46,6 +46,7 @@ Two core systems are included:
 
 ```latex
 \EvolutionTable{The system processes data efficiently}
+```
 
 ### Stages
 | Generation | Transformation |

@@ -77,6 +77,7 @@ graph TD
     F --> G
     G -->|Length Fitness Check| H[Next Generation]
     H -.->|Recursive Loop| B
+```
 
 ---
 

@@ -1,0 +1,122 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{expl3, xparse}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+
+\title{Emergent Recursive Evolution System}
+\author{Nikola Topalov}
+\date{}
+
+\ExplSyntaxOn
+
+\tl_new:N \l__evo_current_tl
+\tl_new:N \l__evo_a_tl
+\tl_new:N \l__evo_b_tl
+\tl_new:N \l__evo_c_tl
+\tl_new:N \g__evo_table_tl
+\int_new:N \l__evo_gen_int
+\int_new:N \l__evo_score_a_int
+\int_new:N \l__evo_score_b_int
+\int_new:N \l__evo_score_c_int
+
+\cs_new_protected:Nn \__evo_mutate_a:
+{
+  \tl_set_eq:NN \l__evo_a_tl \l__evo_current_tl
+  \tl_replace_all:Nnn \l__evo_a_tl { system } { construct }
+  \tl_replace_all:Nnn \l__evo_a_tl { data } { signal }
+}
+
+\cs_new_protected:Nn \__evo_mutate_b:
+{
+  \tl_set_eq:NN \l__evo_b_tl \l__evo_current_tl
+  \tl_reverse:N \l__evo_b_tl
+  \tl_put_left:Nn \l__evo_b_tl { [ALT]~ }
+}
+
+\cs_new_protected:Nn \__evo_mutate_c:
+{
+  \tl_set_eq:NN \l__evo_c_tl \l__evo_current_tl
+  \tl_replace_all:Nnn \l__evo_c_tl { the } { THE }
+  \tl_put_right:Nn \l__evo_c_tl { ~[exp] }
+}
+
+\cs_new_protected:Nn \__evo_score:
+{
+  \int_set:Nn \l__evo_score_a_int { \tl_count:N \l__evo_a_tl }
+  \int_set:Nn \l__evo_score_b_int { \tl_count:N \l__evo_b_tl }
+  \int_set:Nn \l__evo_score_c_int { \tl_count:N \l__evo_c_tl }
+}
+
+\cs_new_protected:Nn \__evo_select:
+{
+  \__evo_score:
+  \int_compare:nNnTF { \l__evo_score_a_int } > { \l__evo_score_b_int }
+  {
+    \int_compare:nNnTF { \l__evo_score_a_int } > { \l__evo_score_c_int }
+      { \tl_set_eq:NN \l__evo_current_tl \l__evo_a_tl }
+      { \tl_set_eq:NN \l__evo_current_tl \l__evo_c_tl }
+  }
+  {
+    \int_compare:nNnTF { \l__evo_score_b_int } > { \l__evo_score_c_int }
+      { \tl_set_eq:NN \l__evo_current_tl \l__evo_b_tl }
+      { \tl_set_eq:NN \l__evo_current_tl \l__evo_c_tl }
+  }
+}
+
+\cs_new_protected:Nn \__evo_step:
+{
+  \__evo_mutate_a:
+  \__evo_mutate_b:
+  \__evo_mutate_c:
+  \__evo_select:
+  \tl_gput_right:Nx \g__evo_table_tl
+  {
+    \int_use:N \l__evo_gen_int &
+    \exp_not:V \l__evo_a_tl &
+    \exp_not:V \l__evo_b_tl &
+    \exp_not:V \l__evo_c_tl &
+    \exp_not:V \l__evo_current_tl
+    \exp_not:n { \\ \hline }
+  }
+}
+
+\cs_new_protected:Nn \__evo_run:n
+{
+  \tl_set:Nn \l__evo_current_tl { #1 }
+  \int_step_inline:nn { 4 }
+  {
+    \int_set:Nn \l__evo_gen_int { ##1 }
+    \__evo_step:
+  }
+}
+
+\NewDocumentCommand{\EvolutionMatrix}{m}
+{
+  \tl_gclear:N \g__evo_table_tl
+  \begin{longtable}{|c|p{3cm}|p{3cm}|p{3cm}|p{3.5cm}|}
+  \hline
+  \rowcolor[gray]{0.9}
+  Gen & A & B & C & Selected \\ \hline
+  \clist_map_inline:nn { #1 }
+  {
+    \__evo_run:n { ##1 }
+  }
+  \g__evo_table_tl
+  \end{longtable}
+}
+
+\ExplSyntaxOff
+
+\begin{document}
+
+\maketitle
+
+\EvolutionMatrix{
+The system processes data efficiently,
+The system adapts to dynamic data,
+Data flows through the system continuously
+}
+
+\end{document}

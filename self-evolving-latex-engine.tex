@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{expl3, xparse}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+
+\title{A Multi-Pass Self-Evolving Linguistic System in \LaTeX}
+\author{Nikola Topalov}
+\date{}
+
+\ExplSyntaxOn
+
+\tl_new:N \l__evo_current_tl
+\tl_new:N \l__evo_next_tl
+\tl_new:N \g__evo_table_tl
+\int_new:N \l__evo_gen_int
+
+\cs_new_protected:Nn \__evo_stage_one:
+{
+    \tl_replace_all:Nnn \l__evo_current_tl { system } { construct }
+    \tl_replace_all:Nnn \l__evo_current_tl { data } { signal }
+}
+
+\cs_new_protected:Nn \__evo_stage_two:
+{
+    \tl_replace_all:Nnn \l__evo_current_tl { the } { THE }
+    \tl_put_right:Nn \l__evo_current_tl { ~[expanded] }
+}
+
+\cs_new_protected:Nn \__evo_stage_three:
+{
+    \tl_reverse:N \l__evo_current_tl
+    \tl_put_left:Nn \l__evo_current_tl { [CHAOS]~ }
+}
+
+\cs_new_protected:Nn \__evo_apply_stage:
+{
+    \int_case:nn { \l__evo_gen_int }
+    {
+        {1} { \__evo_stage_one: }
+        {2} { \__evo_stage_two: }
+        {3} { \__evo_stage_three: }
+    }
+}
+
+\cs_new_protected:Nn \__evo_run:n
+{
+    \tl_set:Nn \l__evo_current_tl { #1 }
+
+    \int_step_inline:nn { 3 }
+    {
+        \int_set:Nn \l__evo_gen_int { ##1 }
+
+        \__evo_apply_stage:
+
+        \tl_gput_right:Nx \g__evo_table_tl
+        {
+            \int_use:N \l__evo_gen_int & 
+            \exp_not:V \l__evo_current_tl
+            \exp_not:n { \\ \hline }
+        }
+    }
+}
+
+\NewDocumentCommand{\EvolutionTable}{m}
+{
+    \tl_gclear:N \g__evo_table_tl
+
+    \begin{longtable}{|c|p{10cm}|}
+    \hline
+    \rowcolor[gray]{0.9} Generation & Output \\ \hline
+
+    \__evo_run:n { #1 }
+
+    \g__evo_table_tl
+
+    \end{longtable}
+}
+
+\ExplSyntaxOff
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+We introduce a self-referential linguistic system implemented entirely in \LaTeX. The system evolves input text through multiple transformation stages, simulating temporal progression and structural mutation.
+
+\section*{Initial Input}
+\texttt{The system processes data efficiently}
+
+\section*{Evolution Timeline}
+
+\EvolutionTable{The system processes data efficiently}
+
+\section*{Interpretation}
+\begin{itemize}
+\item Generation 1 introduces semantic mutation.
+\item Generation 2 amplifies structural features.
+\item Generation 3 destabilizes the system into nonlinear output.
+\end{itemize}
+
+\section*{Conclusion}
+This experiment demonstrates that \LaTeX\ can simulate iterative transformation systems with state persistence across generations. The resulting structure resembles a constrained evolutionary process operating entirely within a typesetting engine.
+
+\end{document}

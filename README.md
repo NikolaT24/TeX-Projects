@@ -1,8 +1,18 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:6a11cb,100:2575fc&height=200&section=header&text=Emergent%20Recursive%20Evolution&fontSize=30&fontColor=ffffff&animation=fadeIn" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=230&section=header&text=Emergent%20Recursive%20Evolution&fontSize=38&fontAlignY=35&fontColor=ffffff&animation=fadeIn&desc=LaTeX%20as%20a%20Self-Evolving%20System&descAlignY=55&descSize=18" />
 </p>
+
 <div align="center">
 
+<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&duration=3000&color=9D4EDD&center=true&vCenter=true&width=700&lines=Text+becomes+state;State+becomes+process;Process+becomes+evolution;Evolution+becomes+structure" />
+
+<br><br>
+
+<img src="https://img.shields.io/badge/Engine-LaTeX-blueviolet?style=for-the-badge">
+<img src="https://img.shields.io/badge/System-expl3-purple?style=for-the-badge">
+<img src="https://img.shields.io/badge/Concept-Generative%20Computation-black?style=for-the-badge">
+
+<br><br>
 # 🧬 Emergent Recursive Evolution System
 
 *A self-evolving linguistic system implemented entirely in LaTeX.*
